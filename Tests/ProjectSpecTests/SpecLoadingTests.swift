@@ -789,9 +789,7 @@ class SpecLoadingTests: XCTestCase {
                     disableMainThreadChecker: true,
                     stopOnEveryMainThreadCheckerIssue: true,
                     commandLineArguments: ["ENV1": true],
-                    environmentVariables: [
-                        XCScheme.EnvironmentVariable(variable: "TEST_VAR", value: "TEST_VAL", enabled: true),
-                    ],
+                    environmentVariables: [XCScheme.EnvironmentVariable(variable: "TEST_VAR", value: "TEST_VAL", enabled: true)],
                     preActions: [.init(name: "Do Thing", script: "dothing", settingsTarget: "test")],
                     postActions: [.init(name: "Run Script", script: "hello")]
                 )
@@ -841,8 +839,6 @@ class SpecLoadingTests: XCTestCase {
                             ],
                         ],
                         "gatherCoverageData": true,
-                        "enableGPUFrameCaptureMode": 2,
-                        "enableGPUValidationMode": true,
                         "disableMainThreadChecker": true,
                         "stopOnEveryMainThreadCheckerIssue": true,
                         "testPlans": [
