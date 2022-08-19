@@ -15,6 +15,8 @@ public struct TargetScheme: Equatable {
     public var storeKitConfiguration: String?
     public var language: String?
     public var region: String?
+    public var enableGPUFrameCaptureMode: XCScheme.LaunchAction.GPUFrameCaptureMode
+    public var enableGPUValidationMode: XCScheme.LaunchAction.GPUValidationMode
     public var disableMainThreadChecker: Bool
     public var stopOnEveryMainThreadCheckerIssue: Bool
     public var buildImplicitDependencies: Bool
@@ -33,6 +35,8 @@ public struct TargetScheme: Equatable {
         storeKitConfiguration: String? = nil,
         language: String? = nil,
         region: String? = nil,
+        enableGPUFrameCaptureMode: XCScheme.LaunchAction.GPUFrameCaptureMode = XCScheme.LaunchAction.defaultGPUFrameCaptureMode,
+        enableGPUValidationMode: XCScheme.LaunchAction.GPUValidationMode = XCScheme.LaunchAction.defaultGPUValidationMode,
         disableMainThreadChecker: Bool = disableMainThreadCheckerDefault,
         stopOnEveryMainThreadCheckerIssue: Bool = stopOnEveryMainThreadCheckerIssueDefault,
         buildImplicitDependencies: Bool = buildImplicitDependenciesDefault,
@@ -50,6 +54,8 @@ public struct TargetScheme: Equatable {
         self.language = language
         self.region = region
         self.disableMainThreadChecker = disableMainThreadChecker
+        self.enableGPUFrameCaptureMode = enableGPUFrameCaptureMode
+        self.enableGPUValidationMode = enableGPUValidationMode
         self.stopOnEveryMainThreadCheckerIssue = stopOnEveryMainThreadCheckerIssue
         self.buildImplicitDependencies = buildImplicitDependencies
         self.commandLineArguments = commandLineArguments
@@ -98,6 +104,8 @@ extension TargetScheme: JSONObjectConvertible {
         storeKitConfiguration = jsonDictionary.json(atKeyPath: "storeKitConfiguration")
         language = jsonDictionary.json(atKeyPath: "language")
         region = jsonDictionary.json(atKeyPath: "region")
+        enableGPUFrameCaptureMode = jsonDictionary.json(atKeyPath: "enableGPUFrameCaptureMode") ?? XCScheme.LaunchAction.defaultGPUFrameCaptureMode
+        enableGPUValidationMode = jsonDictionary.json(atKeyPath: "enableGPUValidationMode") ?? XCScheme.LaunchAction.defaultGPUValidationMode
         disableMainThreadChecker = jsonDictionary.json(atKeyPath: "disableMainThreadChecker") ?? TargetScheme.disableMainThreadCheckerDefault
         stopOnEveryMainThreadCheckerIssue = jsonDictionary.json(atKeyPath: "stopOnEveryMainThreadCheckerIssue") ?? TargetScheme.stopOnEveryMainThreadCheckerIssueDefault
         buildImplicitDependencies = jsonDictionary.json(atKeyPath: "buildImplicitDependencies") ?? TargetScheme.buildImplicitDependenciesDefault
@@ -127,6 +135,14 @@ extension TargetScheme: JSONEncodable {
 
         if let storeKitConfiguration = storeKitConfiguration {
             dict["storeKitConfiguration"] = storeKitConfiguration
+        }
+
+        if enableGPUFrameCaptureMode != XCScheme.LaunchAction.defaultGPUFrameCaptureMode {
+            dict["enableGPUFrameCaptureMode"] = enableGPUFrameCaptureMode
+        }
+
+        if enableGPUValidationMode != XCScheme.LaunchAction.defaultGPUValidationMode {
+            dict["enableGPUValidationMode"] = enableGPUValidationMode
         }
 
         if disableMainThreadChecker != TargetScheme.disableMainThreadCheckerDefault {

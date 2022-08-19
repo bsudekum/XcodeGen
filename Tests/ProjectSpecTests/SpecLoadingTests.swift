@@ -786,12 +786,13 @@ class SpecLoadingTests: XCTestCase {
                     storeKitConfiguration: "Configuration.storekit",
                     language: "en",
                     region: "US",
+                    enableGPUFrameCaptureMode: .openGL,
+                    enableGPUValidationMode: .enabled,
                     disableMainThreadChecker: true,
                     stopOnEveryMainThreadCheckerIssue: true,
                     commandLineArguments: ["ENV1": true],
                     environmentVariables: [
                         XCScheme.EnvironmentVariable(variable: "TEST_VAR", value: "TEST_VAL", enabled: true),
-                        XCScheme.EnvironmentVariable(variable: "Foobar", value: "foo", enabled: true),
                     ],
                     preActions: [.init(name: "Do Thing", script: "dothing", settingsTarget: "test")],
                     postActions: [.init(name: "Run Script", script: "hello")]
@@ -842,6 +843,8 @@ class SpecLoadingTests: XCTestCase {
                             ],
                         ],
                         "gatherCoverageData": true,
+                        "enableGPUFrameCaptureMode": 2,
+                        "enableGPUValidationMode": true,
                         "disableMainThreadChecker": true,
                         "stopOnEveryMainThreadCheckerIssue": true,
                         "testPlans": [

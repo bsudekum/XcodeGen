@@ -109,6 +109,8 @@ public struct Scheme: Equatable {
         public var preActions: [ExecutionAction]
         public var postActions: [ExecutionAction]
         public var environmentVariables: [XCScheme.EnvironmentVariable]
+        public var enableGPUFrameCaptureMode: XCScheme.LaunchAction.GPUFrameCaptureMode
+        public var enableGPUValidationMode: XCScheme.LaunchAction.GPUValidationMode
         public var disableMainThreadChecker: Bool
         public var stopOnEveryMainThreadCheckerIssue: Bool
         public var language: String?
@@ -129,6 +131,8 @@ public struct Scheme: Equatable {
             preActions: [ExecutionAction] = [],
             postActions: [ExecutionAction] = [],
             environmentVariables: [XCScheme.EnvironmentVariable] = [],
+            enableGPUFrameCaptureMode: XCScheme.LaunchAction.GPUFrameCaptureMode = XCScheme.LaunchAction.defaultGPUFrameCaptureMode,
+            enableGPUValidationMode: XCScheme.LaunchAction.GPUValidationMode = XCScheme.LaunchAction.defaultGPUValidationMode,
             disableMainThreadChecker: Bool = disableMainThreadCheckerDefault,
             stopOnEveryMainThreadCheckerIssue: Bool = stopOnEveryMainThreadCheckerIssueDefault,
             language: String? = nil,
@@ -147,6 +151,8 @@ public struct Scheme: Equatable {
             self.postActions = postActions
             self.environmentVariables = environmentVariables
             self.disableMainThreadChecker = disableMainThreadChecker
+            self.enableGPUFrameCaptureMode = enableGPUFrameCaptureMode
+            self.enableGPUValidationMode = enableGPUValidationMode
             self.stopOnEveryMainThreadCheckerIssue = stopOnEveryMainThreadCheckerIssue
             self.language = language
             self.region = region
@@ -170,6 +176,8 @@ public struct Scheme: Equatable {
         public var config: String?
         public var gatherCoverageData: Bool
         public var coverageTargets: [TestableTargetReference]
+        public var enableGPUFrameCaptureMode: XCScheme.LaunchAction.GPUFrameCaptureMode
+        public var enableGPUValidationMode: XCScheme.LaunchAction.GPUValidationMode
         public var disableMainThreadChecker: Bool
         public var commandLineArguments: [String: Bool]
         public var targets: [TestTarget]
@@ -235,6 +243,8 @@ public struct Scheme: Equatable {
             config: String? = nil,
             gatherCoverageData: Bool = gatherCoverageDataDefault,
             coverageTargets: [TestableTargetReference] = [],
+            enableGPUFrameCaptureMode: XCScheme.LaunchAction.GPUFrameCaptureMode = XCScheme.LaunchAction.defaultGPUFrameCaptureMode,
+            enableGPUValidationMode: XCScheme.LaunchAction.GPUValidationMode = XCScheme.LaunchAction.defaultGPUValidationMode,
             disableMainThreadChecker: Bool = disableMainThreadCheckerDefault,
             randomExecutionOrder: Bool = false,
             parallelizable: Bool = false,
@@ -254,6 +264,8 @@ public struct Scheme: Equatable {
             self.config = config
             self.gatherCoverageData = gatherCoverageData
             self.coverageTargets = coverageTargets
+            self.enableGPUFrameCaptureMode = enableGPUFrameCaptureMode
+            self.enableGPUValidationMode = enableGPUValidationMode
             self.disableMainThreadChecker = disableMainThreadChecker
             self.commandLineArguments = commandLineArguments
             self.targets = targets
@@ -408,6 +420,8 @@ extension Scheme.Run: JSONObjectConvertible {
         preActions = jsonDictionary.json(atKeyPath: "preActions") ?? []
         postActions = jsonDictionary.json(atKeyPath: "postActions") ?? []
         environmentVariables = try XCScheme.EnvironmentVariable.parseAll(jsonDictionary: jsonDictionary)
+        enableGPUFrameCaptureMode = jsonDictionary.json(atKeyPath: "enableGPUFrameCaptureMode") ?? XCScheme.LaunchAction.defaultGPUFrameCaptureMode
+        enableGPUValidationMode = jsonDictionary.json(atKeyPath: "enableGPUValidationMode") ?? XCScheme.LaunchAction.defaultGPUValidationMode
         disableMainThreadChecker = jsonDictionary.json(atKeyPath: "disableMainThreadChecker") ?? Scheme.Run.disableMainThreadCheckerDefault
         stopOnEveryMainThreadCheckerIssue = jsonDictionary.json(atKeyPath: "stopOnEveryMainThreadCheckerIssue") ?? Scheme.Run.stopOnEveryMainThreadCheckerIssueDefault
         language = jsonDictionary.json(atKeyPath: "language")
@@ -448,6 +462,14 @@ extension Scheme.Run: JSONEncodable {
             "executable": executable,
             "macroExpansion": macroExpansion
         ]
+
+        if enableGPUFrameCaptureMode != XCScheme.LaunchAction.defaultGPUFrameCaptureMode {
+            dict["enableGPUFrameCaptureMode"] = enableGPUFrameCaptureMode
+        }
+
+        if enableGPUValidationMode != XCScheme.LaunchAction.defaultGPUValidationMode {
+            dict["enableGPUValidationMode"] = enableGPUValidationMode
+        }
 
         if disableMainThreadChecker != Scheme.Run.disableMainThreadCheckerDefault {
             dict["disableMainThreadChecker"] = disableMainThreadChecker
@@ -503,7 +525,9 @@ extension Scheme.Test: JSONObjectConvertible {
         } else {
             coverageTargets = []
         }
-        
+
+        enableGPUFrameCaptureMode = jsonDictionary.json(atKeyPath: "enableGPUFrameCaptureMode") ?? XCScheme.LaunchAction.defaultGPUFrameCaptureMode
+        enableGPUValidationMode = jsonDictionary.json(atKeyPath: "enableGPUValidationMode") ?? XCScheme.LaunchAction.defaultGPUValidationMode
         disableMainThreadChecker = jsonDictionary.json(atKeyPath: "disableMainThreadChecker") ?? Scheme.Test.disableMainThreadCheckerDefault
         commandLineArguments = jsonDictionary.json(atKeyPath: "commandLineArguments") ?? [:]
         if let targets = jsonDictionary["targets"] as? [Any] {
@@ -549,6 +573,14 @@ extension Scheme.Test: JSONEncodable {
 
         if gatherCoverageData != Scheme.Test.gatherCoverageDataDefault {
             dict["gatherCoverageData"] = gatherCoverageData
+        }
+
+        if enableGPUFrameCaptureMode != XCScheme.LaunchAction.defaultGPUFrameCaptureMode {
+            dict["enableGPUFrameCaptureMode"] = enableGPUFrameCaptureMode
+        }
+
+        if enableGPUValidationMode != XCScheme.LaunchAction.defaultGPUValidationMode {
+            dict["enableGPUValidationMode"] = enableGPUValidationMode
         }
 
         if disableMainThreadChecker != Scheme.Test.disableMainThreadCheckerDefault {
