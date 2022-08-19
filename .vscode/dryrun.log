@@ -1,0 +1,10 @@
+make --dry-run --always-make --keep-going --print-directory
+make: Entering directory `/Users/bsudekum/src/XcodeGen'
+swift build --disable-sandbox -c release --arch arm64 --arch x86_64
+ 
+mkdir -p /usr/local/bin
+cp -f /Users/bsudekum/src/XcodeGen/.build/apple/Products/Release/xcodegen /usr/local/bin/xcodegen
+mkdir -p /usr/local/share/xcodegen
+cp -R /Users/bsudekum/src/XcodeGen/SettingPresets /usr/local/share/xcodegen/SettingPresets
+make: Leaving directory `/Users/bsudekum/src/XcodeGen'
+ 
