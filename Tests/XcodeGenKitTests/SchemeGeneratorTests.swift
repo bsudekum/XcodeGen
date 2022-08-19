@@ -204,6 +204,28 @@ class SchemeGeneratorTests: XCTestCase {
                 try expect(xcscheme.profileAction?.environmentVariables).to.beNil()
             }
 
+            $0.it("sets gpu settings for scheme") {
+                let scheme = Scheme(
+                    name: "EnvironmentVariablesScheme",
+                    build: Scheme.Build(targets: [buildTarget]),
+                    run: Scheme.Run(enableGPUFrameCaptureMode: .openGL, enableGPUValidationMode: .disabled),
+                    test: Scheme.Test(config: "Debug"),
+                    profile: Scheme.Profile(config: "Debug")
+                )
+                let project = Project(
+                    name: "test",
+                    targets: [app, framework],
+                    schemes: [scheme],
+                    options: .init(schemePathPrefix: "../")
+                )
+                let xcodeProject = try project.generateXcodeProject()
+
+                let xcscheme = try unwrap(xcodeProject.sharedData?.schemes.first)
+
+                try expect(xcscheme.launchAction?.enableGPUFrameCaptureMode) == .openGL
+                try expect(xcscheme.launchAction?.enableGPUValidationMode) == .disabled
+            }
+
             $0.it("generates target schemes from config variant") {
                 let configVariants = ["Test", "PreProd", "Prod"]
                 var target = app

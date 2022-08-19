@@ -786,8 +786,6 @@ class SpecLoadingTests: XCTestCase {
                     storeKitConfiguration: "Configuration.storekit",
                     language: "en",
                     region: "US",
-                    enableGPUFrameCaptureMode: .openGL,
-                    enableGPUValidationMode: .enabled,
                     disableMainThreadChecker: true,
                     stopOnEveryMainThreadCheckerIssue: true,
                     commandLineArguments: ["ENV1": true],
