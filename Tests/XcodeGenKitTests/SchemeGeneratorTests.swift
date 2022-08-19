@@ -284,6 +284,21 @@ class SchemeGeneratorTests: XCTestCase {
                 try expect(xcscheme.profileAction?.environmentVariables) == variables
             }
 
+            $0.it("generates GPU modes for target schemes") {
+                var target = app
+                target.scheme = TargetScheme(enableGPUFrameCaptureMode: .metal, enableGPUValidationMode: .extended)
+
+                let project = Project(name: "test", targets: [target, framework])
+                let xcodeProject = try project.generateXcodeProject()
+
+                try expect(xcodeProject.sharedData?.schemes.count) == 1
+
+                let xcscheme = try unwrap(xcodeProject.sharedData?.schemes.first)
+
+                try expect(xcscheme.launchAction?.enableGPUFrameCaptureMode) == .metal
+                try expect(xcscheme.launchAction?.enableGPUValidationMode) == .extended
+            }
+
             $0.it("generate scheme without debugger - run") {
                 let scheme = Scheme(
                     name: "TestScheme",
