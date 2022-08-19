@@ -789,7 +789,10 @@ class SpecLoadingTests: XCTestCase {
                     disableMainThreadChecker: true,
                     stopOnEveryMainThreadCheckerIssue: true,
                     commandLineArguments: ["ENV1": true],
-                    environmentVariables: [XCScheme.EnvironmentVariable(variable: "TEST_VAR", value: "TEST_VAL", enabled: true)],
+                    environmentVariables: [
+                        XCScheme.EnvironmentVariable(variable: "TEST_VAR", value: "TEST_VAL", enabled: true),
+                        XCScheme.EnvironmentVariable(variable: "Foobar", value: "foo", enabled: true),
+                    ],
                     preActions: [.init(name: "Do Thing", script: "dothing", settingsTarget: "test")],
                     postActions: [.init(name: "Run Script", script: "hello")]
                 )
