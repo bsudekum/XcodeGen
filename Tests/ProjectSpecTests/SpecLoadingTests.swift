@@ -840,7 +840,6 @@ class SpecLoadingTests: XCTestCase {
                         ],
                         "gatherCoverageData": true,
                         "enableGPUFrameCaptureMode": "1",
-                        "enableGPUValidationMode": "1",
                         "disableMainThreadChecker": true,
                         "stopOnEveryMainThreadCheckerIssue": true,
                         "testPlans": [
@@ -873,7 +872,6 @@ class SpecLoadingTests: XCTestCase {
                 try expect(scheme.build.buildImplicitDependencies) == false
                 try expect(scheme.build.runPostActionsOnFailure) == true
                 try expect(scheme.test?.enableGPUFrameCaptureMode) == .metal
-                try expect(scheme.test?.enableGPUValidationMode) == .disabled
 
                 let expectedRun = Scheme.Run(
                     config: "debug",
@@ -886,7 +884,6 @@ class SpecLoadingTests: XCTestCase {
                     config: "debug",
                     gatherCoverageData: true,
                     enableGPUFrameCaptureMode: .metal,
-                    enableGPUValidationMode: .disabled,
                     disableMainThreadChecker: true,
                     targets: [
                         "Target1",
