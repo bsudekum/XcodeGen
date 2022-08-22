@@ -204,28 +204,6 @@ class SchemeGeneratorTests: XCTestCase {
                 try expect(xcscheme.profileAction?.environmentVariables).to.beNil()
             }
 
-            $0.it("sets gpu settings for scheme") {
-                let scheme = Scheme(
-                    name: "EnvironmentVariablesScheme",
-                    build: Scheme.Build(targets: [buildTarget]),
-                    run: Scheme.Run(enableGPUFrameCaptureMode: .openGL, enableGPUValidationMode: .disabled),
-                    test: Scheme.Test(config: "Debug"),
-                    profile: Scheme.Profile(config: "Debug")
-                )
-                let project = Project(
-                    name: "test",
-                    targets: [app, framework],
-                    schemes: [scheme],
-                    options: .init(schemePathPrefix: "../")
-                )
-                let xcodeProject = try project.generateXcodeProject()
-
-                let xcscheme = try unwrap(xcodeProject.sharedData?.schemes.first)
-
-                try expect(xcscheme.launchAction?.enableGPUFrameCaptureMode) == .openGL
-                try expect(xcscheme.launchAction?.enableGPUValidationMode) == .disabled
-            }
-
             $0.it("generates target schemes from config variant") {
                 let configVariants = ["Test", "PreProd", "Prod"]
                 var target = app
@@ -282,21 +260,6 @@ class SchemeGeneratorTests: XCTestCase {
                 try expect(xcscheme.launchAction?.environmentVariables) == variables
                 try expect(xcscheme.testAction?.environmentVariables) == variables
                 try expect(xcscheme.profileAction?.environmentVariables) == variables
-            }
-
-            $0.it("generates GPU modes for target schemes") {
-                var target = app
-                target.scheme = TargetScheme(enableGPUFrameCaptureMode: .metal, enableGPUValidationMode: .extended)
-
-                let project = Project(name: "test", targets: [target, framework])
-                let xcodeProject = try project.generateXcodeProject()
-
-                try expect(xcodeProject.sharedData?.schemes.count) == 1
-
-                let xcscheme = try unwrap(xcodeProject.sharedData?.schemes.first)
-
-                try expect(xcscheme.launchAction?.enableGPUFrameCaptureMode) == .metal
-                try expect(xcscheme.launchAction?.enableGPUValidationMode) == .extended
             }
 
             $0.it("generate scheme without debugger - run") {
