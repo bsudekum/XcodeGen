@@ -525,7 +525,6 @@ extension Scheme.Test: JSONObjectConvertible {
         } else {
             coverageTargets = []
         }
-
         enableGPUFrameCaptureMode = jsonDictionary.json(atKeyPath: "enableGPUFrameCaptureMode") ?? XCScheme.LaunchAction.defaultGPUFrameCaptureMode
         enableGPUValidationMode = jsonDictionary.json(atKeyPath: "enableGPUValidationMode") ?? XCScheme.LaunchAction.defaultGPUValidationMode
         disableMainThreadChecker = jsonDictionary.json(atKeyPath: "disableMainThreadChecker") ?? Scheme.Test.disableMainThreadCheckerDefault
